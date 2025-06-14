@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title th:text="|${invite.jobTitle} - 面談邀請|">面談邀請</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            padding: 16px 8px;
+        }
+
+        th, td {
+            padding: 12px; /* 增加內距以提升可讀性 */
+            text-align: left;
+            vertical-align: top;
+            border: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: bold;
+            width: 20%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        ul, ol {
+            padding-left: 18px;
+            margin: 8px 0;
+        }
+
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .clear-text {
+            font-size: 20px;
+            line-height: 2;
+        }
+
+        .confidential-notice {
+            font-size: 12px;
+            color: #999; /* 稍微加深顏色以提高可讀性 */
+            line-height: 1.6;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+            margin-top: 25px;
+        }
+
+        .confidential-notice p {
+            margin: 0 0 10px;
+        }
+
+        .confidential-notice strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #777;
+        }
+
+        /* 響應式設計：在小螢幕上將表格轉為區塊顯示 */
+        @media screen and (max-width: 600px) {
+            body {
+                padding: 8px;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            table, th, td {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            th {
+                text-align: left;
+                padding-bottom: 4px;
+                border: none;
+                background-color: transparent;
+            }
+
+            td {
+                padding-top: 4px;
+                padding-left: 12px;
+                border: none;
+                border-bottom: 1px solid #e2e8f0;
+                margin-bottom: 15px;
+            }
+
+            td:last-of-type {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p th:text="|親愛的 ${invite.candidateName} 您好：|">親愛的 王小明 您好：</p>
+    <p>誠摯邀請您參與<strong th:text="|【${invite.jobTitle}】|">【軟體工程師】</strong>的面談，以下為相關資訊：</p>
+    <table>
+        <tr>
+            <th>面談時間</th>
+            <td><strong class="clear-text" th:text="${invite.interviewDateTime}">2025/06/20 (五) 14:30</strong></td>
+        </tr>
+        <tr>
+            <th>面談方式</th>
+            <td>
+                Google Meet<br/>
+                <strong class="clear-text"><a rel="noopener noreferrer nofollow" target="_blank"
+                                              th:href="${invite.meetLink}">立即加入會議</a></strong><br/>
+                <strong th:text="|會議識別碼：${invite.meetId}|">會議識別碼：abc-defg-hij</strong><br/>
+                <!-- 使用 th:if 判斷密碼是否存在 -->
+                <strong th:if="${invite.meetPassword != null}"
+                        th:text="|密碼：${invite.meetPassword}|">密碼：123456</strong><br/>
+                <br/>
+                <strong>⚠️ 請提前 5 分鐘加入會議</strong><br/>
+                <strong>⚠️ 確保您的攝影機和麥克風正常運作</strong>
+            </td>
+        </tr>
+        <tr>
+            <th>面試準備</th>
+            <td>
+                <ul>
+                    <li>
+                        請使用邀請碼【<strong th:text="${invite.invitationCode}">ABC123</strong>】至<a
+                            rel="noopener noreferrer nofollow" target="_blank"
+                            th:href="${invite.careersUrl}">XX人才網</a>註冊，並在面試當日 0:00 之前完成以下項目：
+                        <ul>
+                            <li>填寫個人資料表</li>
+                            <li>上傳履歷</li>
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th>面試流程</th>
+            <td>
+                <!-- 使用 th:each 遍歷流程步驟 -->
+                <ol>
+                    <li th:each="step : ${invite.interviewSteps}" th:text="${step}">第一階段：技術面試 (30 分鐘)</li>
+                </ol>
+            </td>
+        </tr>
+        <tr>
+            <th>回覆確認</th>
+            <td><strong>⚠️ 請收到本信件後，向 HR
+                聯絡人發送「已收到通知」之電子郵件，以利安排後續流程（此為系統代發信，勿直接回覆本信件）</strong></td>
+        </tr>
+        <tr>
+            <th>HR 聯絡資訊</th>
+            <td>
+                <strong th:text="${invite.hrContactName}">李小姐</strong><br>
+                電話：<a th:href="|tel:${invite.hrPhoneNumber}|" th:text="${invite.hrPhoneNumber}">02-9876-5432
+                #456</a><br/>
+                Email：<a th:href="|mailto:${invite.hrEmail}|" th:text="${invite.hrEmail}">hr@google.com</a>
+            </td>
+        </tr>
+    </table>
+    <div class="confidential-notice">
+        <strong>機密郵件聲明 | Confidentiality Notice</strong>
+        <p>
+            本電子郵件內容含有機密資訊，僅供指定收件人使用。若您並非本郵件之指定收件人，請勿閱覽、轉發、散布或複製本郵件內容。若您誤收此郵件，請立即通知寄件人，並自您的系統中永久刪除本郵件及其所有附件。</p>
+        <p>This email contains confidential information and is intended solely for the use of the designated recipient.
+            If you are not the intended recipient, you are strictly prohibited from reading, forwarding, distributing,
+            or copying the contents of this email. If you have received this email in error, please notify the sender
+            immediately and permanently delete the email and all its attachments from your system.</p>
+    </div>
+</div>
+</body>
+</html>

@@ -106,8 +106,6 @@ local.properties
 # PDT-specific
 .buildpath
 
-.idea/
-
 ### SVN ###
 .svn/
 
